@@ -1,39 +1,37 @@
-package com.example.androidonkotlinlesson1;
+package com.example.androidonkotlinlesson1
 
-import android.os.Bundle;
-import android.text.Editable;
-import android.widget.Button;
-import android.widget.TextView;
+import androidx.appcompat.app.AppCompatActivity
+import android.os.Bundle
+import com.google.android.material.textfield.TextInputEditText
+import android.widget.Button
+import android.widget.TextView
 
-import androidx.appcompat.app.AppCompatActivity;
+class MainActivity : AppCompatActivity() {
 
-import com.google.android.material.textfield.TextInputEditText;
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_main)
 
-public class MainActivity extends AppCompatActivity {
+        val editText = findViewById<TextInputEditText>(R.id.input_text)
+        val btn = findViewById<Button>(R.id.button)
+        val textView = findViewById<TextView>(R.id.message)
+        val btnFragment = findViewById<Button>(R.id.btn_fragment)
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        btn.setOnClickListener {
+            val message = editText.text
+            when {
+                message == null -> textView.text = "Введите текст"
+                message.length > 5 -> textView.text = message
+                else -> textView.text = "Введите более 5 символов"
+            }
+        }
 
-        TextInputEditText editText = findViewById(R.id.input_text);
-        Button btn = findViewById(R.id.button);
-        TextView textView = findViewById(R.id.message);
-        Button btnFragment = findViewById(R.id.btn_fragment);
-
-        btn.setOnClickListener(v -> {
-            Editable message = editText.getText();
-
-            if (message == null) textView.setText("Введите текст");
-            else if (message.length() > 5) textView.setText(message);
-            else textView.setText("Введите более 5 символов");
-
-        });
-
-        btnFragment.setOnClickListener(v -> getSupportFragmentManager()
+        btnFragment.setOnClickListener {
+            supportFragmentManager
                 .beginTransaction()
-                .replace(R.id.container, BlankFragment.newInstance())
+                .replace(R.id.container, BlankFragment.Companion.newInstance())
                 .addToBackStack("1")
-                .commit());
+                .commit()
+        }
     }
 }
